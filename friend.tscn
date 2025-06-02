@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://bxtrsm5vsgaq4"]
+
+[ext_resource type="Script" path="res://friend.gd" id="1_ixcws"]
+[ext_resource type="Texture2D" uid="uid://dg3abbvksb3is" path="res://друг.png" id="2_cqiap"]
+[ext_resource type="AudioStream" uid="uid://ecrkeuu0uno1" path="res://calm.mp3" id="3_uahe5"]
+[ext_resource type="AudioStream" uid="uid://bnrttxkf715qs" path="res://magicc.wav" id="4_sk3pp"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1s218"]
+radius = 14.0
+height = 34.0
+
+[node name="Friend" type="Area2D"]
+script = ExtResource("1_ixcws")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_cqiap")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_1s218")
+
+[node name="FriendMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_uahe5")
+
+[node name="Magic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_sk3pp")

@@ -1,0 +1,67 @@
+[gd_scene load_steps=10 format=3 uid="uid://bhgxx2ks03bex"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_tinqu"]
+[ext_resource type="SpriteFrames" uid="uid://ciigykkrnyfpc" path="res://player.tres" id="2_cevqd"]
+[ext_resource type="Texture2D" uid="uid://b1qrd7uben5ni" path="res://сердце.png" id="3_ek8n3"]
+[ext_resource type="AudioStream" uid="uid://diopp88ph4yts" path="res://boss_roar.wav" id="4_yuj23"]
+[ext_resource type="AudioStream" uid="uid://dcjw5c56qt5q6" path="res://damage.wav" id="5_ico50"]
+[ext_resource type="AudioStream" uid="uid://ctp1aoy2l2ogs" path="res://street_rain.wav" id="6_0soe5"]
+[ext_resource type="AudioStream" uid="uid://bimp34pyna15i" path="res://phone.mp3" id="7_4unjb"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tlapp"]
+radius = 14.0
+height = 34.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_0y2we"]
+font_color = Color(0, 0, 0, 1)
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 3
+script = ExtResource("1_tinqu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_tlapp")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("2_cevqd")
+animation = &"walk_forward"
+frame_progress = 0.504704
+
+[node name="PlayerUI" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="PlayerUI"]
+visible = false
+offset_right = 676.0
+offset_bottom = 502.0
+color = Color(0, 0, 0, 1)
+
+[node name="HeartIcon" type="Sprite2D" parent="PlayerUI"]
+position = Vector2(522, 24)
+scale = Vector2(0.072973, 0.072973)
+texture = ExtResource("3_ek8n3")
+
+[node name="HealthLabel" type="Label" parent="PlayerUI"]
+offset_left = 541.0
+offset_top = 12.0
+offset_right = 581.0
+offset_bottom = 35.0
+text = "x 3"
+label_settings = SubResource("LabelSettings_0y2we")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CapsuleShape2D_tlapp")
+
+[node name="BossRoar" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_yuj23")
+
+[node name="DamageSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_ico50")
+
+[node name="RainMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_0soe5")
+
+[node name="Phone" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_4unjb")
+volume_db = 12.734

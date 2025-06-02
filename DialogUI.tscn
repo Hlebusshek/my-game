@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3 uid="uid://eak7bunhv10b"]
+
+[ext_resource type="Script" path="res://dialog_ui.gd" id="1_xcom7"]
+[ext_resource type="Texture2D" uid="uid://buqvginlco0ow" path="res://space.webp" id="2_lhn03"]
+[ext_resource type="Script" path="res://button.gd" id="3_yni3i"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8pw7i"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_2oodx"]
+font_size = 24
+font_color = Color(0, 0, 0, 1)
+
+[node name="DialogUI" type="CanvasLayer"]
+script = ExtResource("1_xcom7")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 14.0
+offset_top = 334.0
+offset_right = 626.0
+offset_bottom = 469.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_8pw7i")
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 8.0
+offset_right = 562.0
+offset_bottom = 132.0
+text = "lll"
+label_settings = SubResource("LabelSettings_2oodx")
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ChoiceContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 87.0
+offset_right = 560.0
+offset_bottom = 126.0
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Panel"]
+layout_mode = 0
+offset_left = 533.0
+offset_top = 74.0
+offset_right = 609.0
+offset_bottom = 150.0
+texture = ExtResource("2_lhn03")
+expand_mode = 1
+
+[node name="Button" type="Button" parent="."]
+offset_left = 282.0
+offset_top = 413.0
+offset_right = 356.0
+offset_bottom = 447.0
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("3_yni3i")
