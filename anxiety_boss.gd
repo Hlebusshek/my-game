@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-var projectile_scene = preload("res://anxiety_projectile.tscn")
+var projectile_scene = GameResources.load_scene("anxiety_projectile")
 @export var fire_rate: float = 0.5
 @export var projectile_count: int = 12
 @export var start_delay: float = 0.5
@@ -44,13 +44,11 @@ func _on_friend_spawn_timer_timeout():
 	if not can_attack:
 		return
 		
-	friend_instance = preload("res://friend.tscn").instantiate()
+	friend_instance = GameResources.load_scene("friend").instantiate()
 	get_parent().add_child(friend_instance)
 	friend_instance.position = Vector2(50, 450)
 	friend_instance.add_to_group("friend")
 	friend_instance.add_to_group("interactable")
-
-
 	
 func spawn_projectile(base_angle: float):
 	var projectile = projectile_scene.instantiate()
@@ -138,30 +136,37 @@ func _on_pattern_timer_timeout():
 	current_pattern = patterns[randi() % patterns.size()]
 
 func _process(delta):
-	var closest_interactable = null
-	var min_distance = INTERACTION_DISTANCE
-	
-	for interactable in get_tree().get_nodes_in_group("interactable"):
-		var distance = global_position.distance_to(interactable.global_position)
-		if distance < min_distance:
-			min_distance = distance
-			closest_interactable = interactable
+	update_interactable_prompt()
+	handle_interaction()
 
-	if current_interactable != closest_interactable:
-		if current_interactable:
-			prompt.hide_prompt()
-		
-		current_interactable = closest_interactable
-		
-		if current_interactable:
-			if current_interactable.has_method("get_interaction_text"):
-				prompt.show_prompt(current_interactable.get_interaction_text())
-			else:
-				prompt.show_prompt()
-	
+func update_interactable_prompt():
+	var closest = get_closest_interactable()
+	if current_interactable != closest:
+		prompt.hide_prompt() if current_interactable else null
+		current_interactable = closest
+		show_current_prompt()
+
+func get_closest_interactable():
+	var closest = null
+	var min_dist = INTERACTION_DISTANCE
+	for interactable in get_tree().get_nodes_in_group("interactable"):
+		var dist = global_position.distance_to(interactable.global_position)
+		if dist < min_dist:
+			min_dist = dist
+			closest = interactable
+	return closest
+
+func show_current_prompt():
+	if current_interactable:
+		var text = current_interactable.get_interaction_text() if current_interactable.has_method("get_interaction_text") else ""
+		prompt.show_prompt(text)
+
+func handle_interaction():
 	if Input.is_action_just_pressed("interact") and current_interactable:
 		if current_interactable.is_in_group("friend"):
-			get_tree().call_group("anxiety_projectiles", "queue_free")
+			clear_projectiles()
 			interacting_friend = current_interactable
-			if current_interactable.has_method("show_dialog"):
-				current_interactable.show_dialog()
+			current_interactable.show_dialog() if current_interactable.has_method("show_dialog") else null
+
+func clear_projectiles():
+	get_tree().call_group("anxiety_projectiles", "queue_free")

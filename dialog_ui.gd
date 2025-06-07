@@ -25,7 +25,6 @@ func _process(delta: float) -> void:
 func finish_dialog():
 	emit_signal("dialog_finished")
 
-
 func start_dialog(lines: Array):
 	current_choices = []
 	if is_dialog_active: 

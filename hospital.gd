@@ -29,7 +29,7 @@ func _ready() -> void:
 	await start_credits()
 
 	await get_tree().create_timer(3.0).timeout
-	get_tree().change_scene_to_file("res://main.tscn")
+	get_tree().change_scene_to_file(GameResources.scenes["main"])
 
 
 func start_credits():

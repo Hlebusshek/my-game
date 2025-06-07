@@ -1,5 +1,5 @@
 extends Node
-@onready var player_scene = preload("res://player.tscn")
+@onready var player_scene = GameResources.load_scene("player")
 @onready var prompt = InteractionPrompt
 @onready var rain_music = $RainMusic
 

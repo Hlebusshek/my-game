@@ -1,7 +1,7 @@
 extends Sprite2D
 
 @onready var player = get_node("/root/Main/Player")
-@export var next_scene_path: String = "res://Street.tscn"
+@export var next_scene_path: String = GameResources.scenes["street"]
 @onready var rain_music = get_node("/root/Main/RainMusic")
 @onready var door_music = get_node("/root/Main/DoorMusic")
 @onready var dialog_ui = DialogUI
@@ -18,7 +18,7 @@ func show_dialog():
 		func(choice_idx):               
 			if choice_idx == 0:
 				player.street = true
-				get_tree().change_scene_to_file("res://street.tscn")
+				get_tree().change_scene_to_file(GameResources.scenes["street"])
 				rain_music.stop()
 			else:
 				pass

@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-var projectile_scene = preload("res://anxiety_projectile.tscn")
+var projectile_scene = GameResources.load_scene("anxiety_projectile")
 @export var fire_rate: float = 0.5
 @export var projectile_count: int = 12
 @export var start_delay: float = 0.5
@@ -36,16 +36,6 @@ func start_battle():
 	pattern_timer.wait_time = 0.2
 	attack_timer.start()
 	pattern_timer.start()
-	
-func _on_friend_spawn_timer_timeout():
-	if not can_attack:
-		return
-		
-	friend_instance = preload("res://friend.tscn").instantiate()
-	get_parent().add_child(friend_instance)
-	friend_instance.position = Vector2(50, 450)
-	friend_instance.add_to_group("friend")
-	friend_instance.add_to_group("interactable")
 
 	
 func spawn_projectile(base_angle: float):

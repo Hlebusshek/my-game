@@ -7,7 +7,7 @@ var near_bed = false
 @onready var dialog_ui = DialogUI
 @onready var prompt = InteractionPrompt
 @onready var count_rip = rip_count
-@onready var anxiety = preload("res://anxiety_boss.tscn").instantiate()
+@onready var anxiety = GameResources.load_scene("anxiety_boss").instantiate()
 @onready var fade_rect = $PlayerUI/ColorRect
 @onready var damage_sound = $DamageSound
 @onready var phone_music = $Phone
@@ -31,12 +31,12 @@ var home_dialog: bool = false
 func _ready():
 	$Area2D.connect("area_entered", _on_area_entered)
 	add_to_group("player")
-	if get_tree().current_scene.scene_file_path == "res://main.tscn":
+	if get_tree().current_scene.scene_file_path == GameResources.scenes["main"]:
 		home = true
-	if get_tree().current_scene.scene_file_path == "res://street.tscn":
+	if get_tree().current_scene.scene_file_path == GameResources.scenes["street"]:
 		street = true
 		home = false
-	if get_tree().current_scene.scene_file_path == "res://park.tscn":
+	if get_tree().current_scene.scene_file_path == GameResources.scenes["park"]:
 		park = true
 		street = false
 	screen_size = get_viewport_rect().size
@@ -72,104 +72,127 @@ func take_damage(amount: int):
 		game_over()
 
 func game_over():
-	var boss = get_tree().get_first_node_in_group("anxiety_boss")
+	var boss = get_boss()
+	
 	if park:
-		boss = get_tree().get_first_node_in_group("depression_boss")
-		count_rip.depression_rip_count += 1
-		if count_rip.depression_rip_count == 3:
-			boss.can_attack = false
-			boss.fight_music.stop()
-			var dialog1 = ["Я так больше не могу... Мне правда нужна помощь..."]
-			DialogUI.start_dialog(dialog1)
-			await DialogUI.dialog_finished
-			phone_music.play()
-			var dialog2 = ["*звонок телефона*",
-			 "А-алло?..", "Голос из телефона:\nЗдравствуйте, это клиника 'Душевный баланс'.",
-			"Голос из телефона:\nВы записаны на 15:00, ждём вас сегодня?", "...",
-			"/Точно... Они смогут мне помочь.../", "/Я справлюсь!!/", "Да! Я обязательно приду! Скоро буду!" ]
-			DialogUI.start_dialog(dialog2)
-			await DialogUI.dialog_finished
-			await fade_and_change_scene("res://hospital.tscn")
-			return 
+		handle_depression_ending(boss)
+		return
+	
+	handle_standard_ending(boss)
+
+func get_boss():
+	return get_tree().get_first_node_in_group("depression_boss" if park else "anxiety_boss")
+
+func handle_depression_ending(boss):
+	count_rip.depression_rip_count += 1
 	boss.can_attack = false
-	var dialog = ["Я чувствую себя нехорошо...", "Надо попробовать еще раз!"]
-	DialogUI.start_dialog(dialog)
+	boss.fight_music.stop()
+	
+	if count_rip.depression_rip_count == 3:
+		await show_hospital_dialogs()
+		await fade_and_change_scene(GameResources.scenes["hospital"])
+		return
+	
+	await show_retry_dialog()
+	reload_scene(boss)
+
+func handle_standard_ending(boss):
+	boss.can_attack = false
+	await show_retry_dialog()
+	reload_scene(boss)
+
+func show_hospital_dialogs():
+	var dialogs = [
+		["Я так больше не могу... Мне правда нужна помощь..."],
+		["*звонок телефона*", "А-алло?..", 
+		 "Голос из телефона:\nЗдравствуйте, это клиника 'Душевный баланс'.",
+		 "Голос из телефона:\nВы записаны на 15:00, ждём вас сегодня?", "...",
+		 "/Точно... Они смогут мне помочь.../", "/Я справлюсь!!/", 
+		 "Да! Я обязательно приду! Скоро буду!"]
+	]
+	
+	for dialog in dialogs:
+		DialogUI.start_dialog(dialog)
+		await DialogUI.dialog_finished
+		if dialog == dialogs[0]:
+			phone_music.play()
+
+func show_retry_dialog():
+	DialogUI.start_dialog(["Я чувствую себя нехорошо...", "Надо попробовать еще раз!"])
 	await DialogUI.dialog_finished
+
+func reload_scene(boss):
 	if get_tree():
 		get_tree().reload_current_scene()
 	boss.can_attack = true
 
-
 func _process(delta):
-	var closest_interactable = null
-	var min_distance = INTERACTION_DISTANCE
+	if not is_instance_valid(dialog_ui) or dialog_ui.is_dialog_active:
+		return
+	
+	handle_interaction()
+	handle_movement(delta)
+
+func handle_interaction():
+	var closest = find_closest_interactable()
+	
+	if current_interactable != closest:
+		prompt.hide_prompt() if current_interactable else null
+		current_interactable = closest
+		update_prompt()
+	
+	if Input.is_action_just_pressed("interact") and is_valid_interactable():
+		current_interactable.show_dialog()
+
+func find_closest_interactable():
+	var closest = null
+	var min_dist = INTERACTION_DISTANCE
 	
 	for interactable in get_tree().get_nodes_in_group("interactable"):
-		var distance = global_position.distance_to(interactable.global_position)
-		if distance < min_distance:
-			min_distance = distance
-			closest_interactable = interactable
+		var dist = global_position.distance_to(interactable.global_position)
+		if dist < min_dist:
+			min_dist = dist
+			closest = interactable
+	return closest
 
-	if current_interactable != closest_interactable:
-		if current_interactable:
-			prompt.hide_prompt()
-		
-		current_interactable = closest_interactable
-		
-		if current_interactable:
-			if current_interactable.has_method("get_interaction_text"):
-				prompt.show_prompt(current_interactable.get_interaction_text())
+func update_prompt():
+	if current_interactable:
+		if current_interactable.has_method("get_interaction_text"):
+			var custom_text = current_interactable.get_interaction_text()
+			if custom_text != "":
+				prompt.show_prompt(custom_text)
 			else:
 				prompt.show_prompt()
-			if current_interactable.has_method("show_dialog"):
-				if Input.is_action_just_pressed("interact"):
-					current_interactable.show_dialog()
-	
-	if Input.is_action_just_pressed("interact") and current_interactable:
-		if is_instance_valid(current_interactable) and current_interactable.has_method("show_dialog"):
-			current_interactable.show_dialog()
-			
-	if not is_instance_valid(dialog_ui):
-		return
-	if dialog_ui.is_dialog_active:
-		return
-		
-		
-	var velocity = Vector2.ZERO
-	if Input.is_action_pressed("move_right"):
-		velocity.x += 1
-	if Input.is_action_pressed("move_left"):
-		velocity.x -= 1
-	if Input.is_action_pressed("move_down"):
-		velocity.y += 1
-	if Input.is_action_pressed("move_up"):
-		velocity.y -= 1
+		else:
+			prompt.show_prompt()
 
-	if velocity.length() > 0:
-		velocity = velocity.normalized() * speed
-	else:
-		pass
+func is_valid_interactable():
+	return current_interactable and is_instance_valid(current_interactable) and current_interactable.has_method("show_dialog")
+
+func handle_movement(delta):
+	var velocity = get_input_velocity()
+	update_position(velocity, delta)
+	update_animation(velocity)
+
+func get_input_velocity():
+	var input = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	return input.normalized() * speed if input.length() > 0 else Vector2.ZERO
+
+func update_position(velocity, delta):
 	position += velocity * delta
 	position = position.clamp(
 		Vector2(player_size.x/2, player_size.y/2), 
 		Vector2(screen_size.x - player_size.x/2, screen_size.y - player_size.y/2))
-	if abs(velocity.y)>0 or abs(velocity.x)>0:
-		
-		if velocity.x>0:
-			$AnimatedSprite2D.play("walk_right")
-		elif velocity.x<0:
-			$AnimatedSprite2D.play("walk_left")
-		elif velocity.y>0:
-			$AnimatedSprite2D.play("walk_forward")
-		elif velocity.y<0:
-			$AnimatedSprite2D.play("walk_back")
-	else:
-		if $AnimatedSprite2D.animation == "walk_back":
-			$AnimatedSprite2D.play("walk_back")
-		else:
-			$AnimatedSprite2D.play("walk_forward")
-
 	move_and_slide()
+
+func update_animation(velocity):
+	if velocity.length_squared() > 0:
+		if abs(velocity.x) > abs(velocity.y):
+			$AnimatedSprite2D.play("walk_right" if velocity.x > 0 else "walk_left")
+		else:
+			$AnimatedSprite2D.play("walk_forward" if velocity.y > 0 else "walk_back")
+	else:
+		$AnimatedSprite2D.play("walk_back" if $AnimatedSprite2D.animation == "walk_back" else "walk_forward")
 
 func start_home_dialog_with_delay():
 	if home and not home_dialog:
@@ -178,8 +201,7 @@ func start_home_dialog_with_delay():
 		var dialog = [
 			"Я не выходил из дома уже... даже не помню сколько недель...",
 			"Каждый день - как тяжёлая ноша. Даже простые дела требуют невероятных усилий...",
-			"Но... после месяцев мучений я всё же записался к психотерапевту.",
-			"Сегодня день приёма.",
+			"Но... после месяцев мучений я всё же записался к психотерапевту.","Сегодня день приёма.",
 			"Может быть... просто может быть, мне хоть немного станет легче?",
 			"У меня есть еще немного времени до выхода."
 		]
@@ -188,10 +210,8 @@ func start_home_dialog_with_delay():
 func _physics_process(delta):
 	if position.x > 200 and not in_boss_fight and street:
 		start_boss_fight( [
-			"Голоса из толпы:\nХа-ха-ха! Это так смешно!",
-			"Голоса из толпы:\nТы только посмотри на него!!",
-		"Они все меня обсуждают... Точно меня...",
-		"Я - просто объект для насмешек, не более...",
+			"Голоса из толпы:\nХа-ха-ха! Это так смешно!","Голоса из толпы:\nТы только посмотри на него!!",
+		"Они все меня обсуждают... Точно меня...","Я - просто объект для насмешек, не более...",
 		"Не могу... дышать..."
 	])
 	if position.x > 200 and not in_boss_fight and park:
@@ -202,13 +222,12 @@ func _physics_process(delta):
 	if position.x > 550 and street and anxiety_rip and not flag:
 		flag = true
 		dialog_ui.start_dialog_with_choices(
-		["Вы хотите пойти в парк?"],
-		["Да", "Нет"],
+		["Вы хотите пойти в парк?"], ["Да", "Нет"],
 		func(choice_idx):               
 			if choice_idx == 0:
 				street = false
 				park = true
-				get_tree().change_scene_to_file("res://park.tscn")
+				get_tree().change_scene_to_file(GameResources.scenes["park"])
 				in_boss_fight = false
 			else:
 				pass
@@ -224,9 +243,8 @@ func start_boss_fight(dialog):
 func _on_dialog_finished():
 	speed = 200
 	boss_roar.play()
-	var boss = preload("res://anxiety_boss.tscn").instantiate()
-	if park:
-		boss = preload("res://depression_boss.tscn").instantiate()
+	var boss_scene = GameResources.load_scene("depression_boss" if park else "anxiety_boss")
+	var boss = boss_scene.instantiate()
 	if get_tree():
 		get_tree().current_scene.add_child(boss)
 	var dialog = ["О НЕТ... ЭТО ОПЯТЬ НАЧИНАЕТСЯ...!!!"]
