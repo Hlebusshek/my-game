@@ -8,13 +8,12 @@ var near_bed = false
 @onready var prompt = InteractionPrompt
 @onready var count_rip = rip_count
 @onready var anxiety = GameResources.load_scene("anxiety_boss").instantiate()
-@onready var fade_rect = $PlayerUI/ColorRect
-@onready var damage_sound = $DamageSound
-@onready var phone_music = $Phone
-@onready var depress_music = get_node("/res://scenes/DepressionBoss/Fight")
-@onready var anxiety_music = get_node("/root/AnxietyBoss/Fight")
-@onready var rain_music = get_node("/root/Street/RainMusic")
-@onready var boss_roar = $BossRoar
+@onready var fade_rect = get_node_or_null("PlayerUI/ColorRect")
+@onready var damage_sound = get_node_or_null("DamageSound")
+@onready var phone_music = get_node_or_null("Phone")
+@onready var boss_roar = get_node_or_null("BossRoar")
+var anxiety_music: AudioStreamPlayer = null
+var rain_music: AudioStreamPlayer = null
 var current_interactable: Node = null
 const INTERACTION_DISTANCE = 30
 var in_boss_fight: bool = false
@@ -27,10 +26,10 @@ var home: bool = false
 var home_dialog: bool = false
 var energy: int = 50
 const MAX_ENERGY: int = 100
-@onready var energy_icon = $PlayerUI/EnergyIcon
-@onready var energy_label = $PlayerUI/EnergyLabel
-@onready var heart_icon = $PlayerUI/HeartIcon
-@onready var health_label = $PlayerUI/HealthLabel
+@onready var energy_icon = get_node_or_null("PlayerUI/EnergyIcon")
+@onready var energy_label = get_node_or_null("PlayerUI/EnergyLabel")
+@onready var heart_icon = get_node_or_null("PlayerUI/HeartIcon")
+@onready var health_label = get_node_or_null("PlayerUI/HealthLabel")
 
 func _ready():
 	$Area2D.connect("area_entered", _on_area_entered)
@@ -47,6 +46,8 @@ func _ready():
 	self.collision_mask = 1
 	position.x = 250
 	position.y = 300
+	anxiety_music = get_tree().get_first_node_in_group("anxiety_music")
+	rain_music = get_tree().get_first_node_in_group("rain_music")
 	update_health_display()
 	energy = PlayerState.energy
 	update_energy_display()
@@ -275,7 +276,8 @@ func _on_dialog_finished():
 	
 func end_boss_fight():
 	in_boss_fight = false
-	rain_music.start()
+	if rain_music: 
+		rain_music.start()
 	get_tree().call_group("anxiety_projectiles", "queue_free")
 	var boss = get_tree().get_first_node_in_group("anxiety_boss")
 	if park:

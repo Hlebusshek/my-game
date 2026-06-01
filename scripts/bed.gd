@@ -1,6 +1,5 @@
 extends Sprite2D
 
-@onready var player = $Player
 var dialog_ui = DialogUI
 
 func _ready():

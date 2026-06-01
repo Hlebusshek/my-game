@@ -1,6 +1,5 @@
 extends StaticBody2D
 @onready var dialog_ui = DialogUI
-@onready var breathe_button: Button = $BreatheButton
 @onready var phone_music = get_node("/root/Shop/Phone")
 @onready var shop_music = get_node("/root/Shop/ShopMusic")
 @onready var thinking_music = get_node("/root/Shop/Thinking")
@@ -81,7 +80,6 @@ func _show_choice_menu():
 	if has_made_choice:
 		dialog_ui.start_dialog(["Я уже принял решение. Нужно двигаться дальше."])
 		return
-	if breathe_button: breathe_button.visible = false
 	if initial_choices.is_empty():
 		_generate_choices()
 	var display_texts = []

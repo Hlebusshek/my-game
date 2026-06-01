@@ -2,8 +2,8 @@ extends Node
 
 @onready var player_scene = GameResources.load_scene("player")
 @onready var prompt = InteractionPrompt
-@onready var rain_music = $RainMusic
-@onready var knock_sound = $KnockSound
+@onready var rain_music: AudioStreamPlayer = get_node_or_null("RainMusic")
+@onready var knock_sound: AudioStreamPlayer = get_node_or_null("KnockSound")
 @onready var door_node = $Door
 @onready var sister_sprite = $Sister
 @onready var bg_room = $Room

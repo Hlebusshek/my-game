@@ -3,7 +3,7 @@ extends Area2D
 var dialog_ui = DialogUI
 @onready var friend_music = $FriendMusic
 @onready var magic_music = $Magic
-@onready var fight_music = get_node("/root/AnxietyBoss/Fight")
+@onready var fight_music = get_node_or_null("/root/AnxietyBoss/Fight")
 
 func _ready():
 	add_to_group("interactable")
