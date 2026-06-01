@@ -1,0 +1,94 @@
+[gd_scene load_steps=12 format=3 uid="uid://cgxal0ufiv4d3"]
+
+[ext_resource type="Script" uid="uid://iubh6o30dut3" path="res://scripts/shop.gd" id="1_ajxib"]
+[ext_resource type="Texture2D" uid="uid://b70b4ifgvas27" path="res://pictures/магазин.png" id="2_y6sft"]
+[ext_resource type="Script" uid="uid://b5ed6nyxa0x8g" path="res://scripts/tomato_paste.gd" id="3_m4ofw"]
+[ext_resource type="Script" uid="uid://dkqpyd4o4vlmy" path="res://scripts/cash_register.gd" id="4_heatd"]
+[ext_resource type="AudioStream" uid="uid://dkbeor6yxclyw" path="res://music/shop.wav" id="5_1v8qu"]
+[ext_resource type="AudioStream" uid="uid://bsce32n80n3u7" path="res://music/phone.mp3" id="6_44xle"]
+[ext_resource type="AudioStream" uid="uid://23nl6l0gjlo2" path="res://music/thinking.wav" id="7_24it5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fgaav"]
+size = Vector2(767.25, 341.34375)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_blqjs"]
+size = Vector2(71, 61)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6lah5"]
+size = Vector2(44, 20)
+
+[sub_resource type="LabelSettings" id="LabelSettings_6lah5"]
+font_size = 22
+
+[node name="Shop" type="Node"]
+script = ExtResource("1_ajxib")
+
+[node name="Shop" type="Sprite2D" parent="."]
+position = Vector2(320, 240)
+texture = ExtResource("2_y6sft")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Shop"]
+position = Vector2(0, -211)
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Shop/StaticBody2D"]
+light_mask = 0
+visibility_layer = 8
+position = Vector2(-509, 163)
+shape = SubResource("RectangleShape2D_fgaav")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Shop/StaticBody2D"]
+light_mask = 0
+visibility_layer = 8
+position = Vector2(-9, -41)
+shape = SubResource("RectangleShape2D_fgaav")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Shop/StaticBody2D"]
+light_mask = 0
+visibility_layer = 8
+position = Vector2(497, 160)
+shape = SubResource("RectangleShape2D_fgaav")
+
+[node name="StaticFood" type="StaticBody2D" parent="Shop"]
+position = Vector2(238, 159)
+script = ExtResource("3_m4ofw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Shop/StaticFood"]
+position = Vector2(-1, -67)
+shape = SubResource("RectangleShape2D_blqjs")
+
+[node name="StaticBuy" type="StaticBody2D" parent="Shop"]
+position = Vector2(-8, -63)
+script = ExtResource("4_heatd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Shop/StaticBuy"]
+position = Vector2(0, -28)
+shape = SubResource("RectangleShape2D_6lah5")
+
+[node name="ShopMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_1v8qu")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="BlackBackground" type="ColorRect" parent="CanvasLayer"]
+visible = false
+offset_right = 655.0
+offset_bottom = 488.0
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+visible = false
+offset_left = 100.0
+offset_top = 182.0
+offset_right = 576.0
+offset_bottom = 263.0
+text = "Конец!
+Спасибо за прохождение игры <3"
+label_settings = SubResource("LabelSettings_6lah5")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Phone" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_44xle")
+
+[node name="Thinking" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_24it5")

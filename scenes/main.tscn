@@ -1,0 +1,209 @@
+[gd_scene load_steps=31 format=3 uid="uid://b8lopcrga6bot"]
+
+[ext_resource type="Script" uid="uid://dfokccrm2p3a7" path="res://scripts/main.gd" id="1_yc10j"]
+[ext_resource type="Texture2D" uid="uid://be7q3fw8kameg" path="res://pictures/меню.png" id="2_jscy8"]
+[ext_resource type="Texture2D" uid="uid://dc56pceg35swg" path="res://pictures/комната.png" id="3_pm3ni"]
+[ext_resource type="Texture2D" uid="uid://dot0rkfxcncum" path="res://pictures/окно.png" id="4_y6deb"]
+[ext_resource type="Script" uid="uid://ypj77d2bt3b2" path="res://scripts/window.gd" id="5_og1vs"]
+[ext_resource type="Texture2D" uid="uid://dvbtite8cutkg" path="res://pictures/кровать.png" id="6_2wyq8"]
+[ext_resource type="Script" uid="uid://duqemwobrkb13" path="res://scripts/bed.gd" id="7_vxglm"]
+[ext_resource type="Texture2D" uid="uid://bojjqh454rek2" path="res://pictures/стол.png" id="8_2f3dj"]
+[ext_resource type="Script" uid="uid://boxus0i3xqkep" path="res://scripts/table.gd" id="9_yq6so"]
+[ext_resource type="Texture2D" uid="uid://bmmbhtukduuan" path="res://pictures/дверь.png" id="10_fv21b"]
+[ext_resource type="Script" uid="uid://dfv11b5nb7xwf" path="res://scripts/door.gd" id="11_tel4y"]
+[ext_resource type="Script" uid="uid://cwkhvs2x4xsa6" path="res://scripts/player.gd" id="12_qkpxi"]
+[ext_resource type="SpriteFrames" uid="uid://ciigykkrnyfpc" path="res://pictures/player.tres" id="13_5q0nq"]
+[ext_resource type="Texture2D" uid="uid://b1qrd7uben5ni" path="res://pictures/сердце.png" id="14_dgi5k"]
+[ext_resource type="AudioStream" uid="uid://b4kho7hrxjqoq" path="res://music/boss_roar.wav" id="15_j8jky"]
+[ext_resource type="AudioStream" uid="uid://wkfvch5rh7j5" path="res://music/damage.wav" id="16_kmb1v"]
+[ext_resource type="AudioStream" uid="uid://docfwfatobm6x" path="res://music/street_rain.wav" id="17_fuf3a"]
+[ext_resource type="AudioStream" uid="uid://bsce32n80n3u7" path="res://music/phone.mp3" id="18_pibwh"]
+[ext_resource type="AudioStream" uid="uid://dtmr8klhugb1t" path="res://music/room.mp3" id="19_c6pm6"]
+[ext_resource type="AudioStream" uid="uid://bjv6iqwxfb5rr" path="res://music/door.wav" id="20_5he1u"]
+[ext_resource type="AudioStream" uid="uid://bffefo46l42yi" path="res://music/menu.wav" id="21_5poiv"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_gpv46"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ppu6n"]
+size = Vector2(686, 219)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qyubl"]
+size = Vector2(44, 31)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ppr31"]
+size = Vector2(67, 25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h5k6v"]
+size = Vector2(52, 27)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l5ydo"]
+size = Vector2(4, 46)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kuoyp"]
+radius = 14.0
+height = 34.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_0h60o"]
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l3j2n"]
+radius = 14.0
+height = 34.0
+
+[node name="Main" type="Node"]
+script = ExtResource("1_yc10j")
+
+[node name="Menu" type="CanvasLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Menu"]
+position = Vector2(319, 240)
+texture = ExtResource("2_jscy8")
+
+[node name="StartButton" type="Button" parent="Menu"]
+anchors_preset = -1
+anchor_left = 0.372
+anchor_top = 0.51
+anchor_right = 0.372
+anchor_bottom = 0.51
+offset_left = -0.0800018
+offset_top = 0.199982
+offset_right = 122.92
+offset_bottom = 50.2
+text = "Играть"
+
+[node name="ExitButton" type="Button" parent="Menu"]
+offset_left = 471.0
+offset_top = 370.0
+offset_right = 571.0
+offset_bottom = 415.0
+text = "Выход"
+
+[node name="Room" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_gpv46")
+position = Vector2(320, 240)
+texture = ExtResource("3_pm3ni")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Room"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/StaticBody2D"]
+position = Vector2(16, -133.5)
+shape = SubResource("RectangleShape2D_ppu6n")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Room/StaticBody2D"]
+position = Vector2(3, 209)
+shape = SubResource("RectangleShape2D_ppu6n")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Room/StaticBody2D"]
+position = Vector2(-492, 19)
+shape = SubResource("RectangleShape2D_ppu6n")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Room/StaticBody2D"]
+position = Vector2(493, 61)
+shape = SubResource("RectangleShape2D_ppu6n")
+
+[node name="Window" type="Sprite2D" parent="."]
+position = Vector2(321, 211)
+texture = ExtResource("4_y6deb")
+script = ExtResource("5_og1vs")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Window"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Window/StaticBody2D"]
+position = Vector2(0, -9.5)
+shape = SubResource("RectangleShape2D_qyubl")
+
+[node name="Bed" type="Sprite2D" parent="."]
+position = Vector2(221, 249)
+texture = ExtResource("6_2wyq8")
+script = ExtResource("7_vxglm")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Bed"]
+position = Vector2(97, -8)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bed/StaticBody2D"]
+position = Vector2(-96.5, 3.5)
+shape = SubResource("RectangleShape2D_ppr31")
+
+[node name="Table" type="Sprite2D" parent="."]
+position = Vector2(402, 248)
+texture = ExtResource("8_2f3dj")
+script = ExtResource("9_yq6so")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Table"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Table/StaticBody2D"]
+position = Vector2(0, -8.5)
+shape = SubResource("RectangleShape2D_h5k6v")
+
+[node name="Door" type="Sprite2D" parent="."]
+position = Vector2(468, 297)
+texture = ExtResource("10_fv21b")
+script = ExtResource("11_tel4y")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Door"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door/StaticBody2D"]
+shape = SubResource("RectangleShape2D_l5ydo")
+
+[node name="Player" type="CharacterBody2D" parent="."]
+collision_layer = 3
+script = ExtResource("12_qkpxi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CapsuleShape2D_kuoyp")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
+sprite_frames = ExtResource("13_5q0nq")
+animation = &"walk_forward"
+frame_progress = 0.970702
+
+[node name="PlayerUI" type="CanvasLayer" parent="Player"]
+
+[node name="ColorRect" type="ColorRect" parent="Player/PlayerUI"]
+visible = false
+offset_right = 676.0
+offset_bottom = 502.0
+color = Color(0, 0, 0, 1)
+
+[node name="HeartIcon" type="Sprite2D" parent="Player/PlayerUI"]
+position = Vector2(522, 24)
+scale = Vector2(0.072973, 0.072973)
+texture = ExtResource("14_dgi5k")
+
+[node name="HealthLabel" type="Label" parent="Player/PlayerUI"]
+offset_left = 541.0
+offset_top = 12.0
+offset_right = 581.0
+offset_bottom = 35.0
+text = "x 3"
+label_settings = SubResource("LabelSettings_0h60o")
+
+[node name="Area2D" type="Area2D" parent="Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Area2D"]
+shape = SubResource("CapsuleShape2D_l3j2n")
+
+[node name="BossRoar" type="AudioStreamPlayer2D" parent="Player"]
+stream = ExtResource("15_j8jky")
+
+[node name="DamageSound" type="AudioStreamPlayer2D" parent="Player"]
+stream = ExtResource("16_kmb1v")
+volume_db = 15.367
+
+[node name="RainMusic" type="AudioStreamPlayer2D" parent="Player"]
+stream = ExtResource("17_fuf3a")
+
+[node name="Phone" type="AudioStreamPlayer2D" parent="Player"]
+stream = ExtResource("18_pibwh")
+
+[node name="RainMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("19_c6pm6")
+parameters/looping = true
+
+[node name="DoorMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("20_5he1u")
+volume_db = 12.077
+
+[node name="MenuMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("21_5poiv")

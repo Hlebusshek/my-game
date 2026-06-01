@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8mlyhfbo034l"]
+
+[ext_resource type="Script" uid="uid://uv0j66k7prjt" path="res://scripts/depression_boss.gd" id="1_2gbxa"]
+[ext_resource type="Texture2D" uid="uid://dd5mqvsah3vex" path="res://pictures/депрессия.png" id="2_tkw3s"]
+[ext_resource type="AudioStream" uid="uid://pifalwby5lvg" path="res://music/depression_fight.mp3" id="3_lq14w"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g23l7"]
+size = Vector2(65, 66)
+
+[node name="DepressionBoss" type="CharacterBody2D"]
+script = ExtResource("1_2gbxa")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tkw3s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visibility_layer = 4
+position = Vector2(0.5, -2)
+shape = SubResource("RectangleShape2D_g23l7")
+
+[node name="AttackTimer" type="Timer" parent="."]
+
+[node name="PatternTimer" type="Timer" parent="."]
+
+[node name="Fight" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_lq14w")

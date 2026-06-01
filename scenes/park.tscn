@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://bipnqo0acr4ia"]
+
+[ext_resource type="Script" uid="uid://33eq7blx3pmp" path="res://scripts/street.gd" id="1_n33tc"]
+[ext_resource type="Texture2D" uid="uid://c1vuanqrxadet" path="res://pictures/парк.png" id="2_7mjl7"]
+[ext_resource type="AudioStream" uid="uid://docfwfatobm6x" path="res://music/street_rain.wav" id="3_r2x14"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3fgtr"]
+size = Vector2(654, 253)
+
+[node name="Park" type="Node"]
+script = ExtResource("1_n33tc")
+
+[node name="Park" type="Sprite2D" parent="."]
+position = Vector2(320, 240)
+texture = ExtResource("2_7mjl7")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Park"]
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Park/StaticBody2D"]
+light_mask = 0
+visibility_layer = 8
+position = Vector2(-534, -85)
+shape = SubResource("RectangleShape2D_3fgtr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Park/StaticBody2D"]
+light_mask = 0
+visibility_layer = 8
+position = Vector2(0, -125.5)
+shape = SubResource("RectangleShape2D_3fgtr")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Park/StaticBody2D"]
+light_mask = 0
+visibility_layer = 8
+position = Vector2(580, -104)
+shape = SubResource("RectangleShape2D_3fgtr")
+
+[node name="RainMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_r2x14")
+volume_db = 9.0

@@ -1,0 +1,81 @@
+[gd_scene load_steps=11 format=3 uid="uid://bhgxx2ks03bex"]
+
+[ext_resource type="Script" uid="uid://cwkhvs2x4xsa6" path="res://scripts/player.gd" id="1_smehm"]
+[ext_resource type="SpriteFrames" uid="uid://ciigykkrnyfpc" path="res://pictures/player.tres" id="2_ur7pv"]
+[ext_resource type="Texture2D" uid="uid://b1qrd7uben5ni" path="res://pictures/сердце.png" id="3_y4r1p"]
+[ext_resource type="Texture2D" uid="uid://cqi2fqu1f4vtr" path="res://pictures/энергия.png" id="4_d2wvv"]
+[ext_resource type="AudioStream" uid="uid://b4kho7hrxjqoq" path="res://music/boss_roar.wav" id="5_3v2ag"]
+[ext_resource type="AudioStream" uid="uid://wkfvch5rh7j5" path="res://music/damage.wav" id="6_jej6c"]
+[ext_resource type="AudioStream" uid="uid://docfwfatobm6x" path="res://music/street_rain.wav" id="7_f1ej7"]
+[ext_resource type="AudioStream" uid="uid://bsce32n80n3u7" path="res://music/phone.mp3" id="8_oprun"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tlapp"]
+radius = 14.0
+height = 34.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_0y2we"]
+font_color = Color(0, 0, 0, 1)
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 3
+script = ExtResource("1_smehm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_tlapp")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = ExtResource("2_ur7pv")
+animation = &"walk_forward"
+frame_progress = 0.504704
+
+[node name="PlayerUI" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="PlayerUI"]
+visible = false
+offset_right = 676.0
+offset_bottom = 502.0
+color = Color(0, 0, 0, 1)
+
+[node name="HeartIcon" type="Sprite2D" parent="PlayerUI"]
+position = Vector2(522, 24)
+scale = Vector2(0.072973, 0.072973)
+texture = ExtResource("3_y4r1p")
+
+[node name="HealthLabel" type="Label" parent="PlayerUI"]
+offset_left = 541.0
+offset_top = 12.0
+offset_right = 581.0
+offset_bottom = 35.0
+text = "x 3"
+label_settings = SubResource("LabelSettings_0y2we")
+
+[node name="EnergyIcon" type="Sprite2D" parent="PlayerUI"]
+position = Vector2(522, 23)
+scale = Vector2(1.0821326, 1.0358142)
+texture = ExtResource("4_d2wvv")
+
+[node name="EnergyLabel" type="Label" parent="PlayerUI"]
+offset_left = 541.0
+offset_top = 12.0
+offset_right = 596.0
+offset_bottom = 35.0
+text = "50/100"
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CapsuleShape2D_tlapp")
+
+[node name="BossRoar" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_3v2ag")
+
+[node name="DamageSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_jej6c")
+
+[node name="RainMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_f1ej7")
+
+[node name="Phone" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_oprun")
+volume_db = 12.734

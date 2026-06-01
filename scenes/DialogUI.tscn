@@ -1,0 +1,85 @@
+[gd_scene load_steps=7 format=3 uid="uid://eak7bunhv10b"]
+
+[ext_resource type="Script" uid="uid://dwu588cj4yp0f" path="res://scripts/dialog_ui.gd" id="1_6n8ev"]
+[ext_resource type="Texture2D" uid="uid://buqvginlco0ow" path="res://pictures/space.webp" id="2_trnpe"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8pw7i"]
+bg_color = Color(0.51476926, 0.6201852, 0.66408294, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_2oodx"]
+font_size = 24
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Theme" id="Theme_qc0i0"]
+
+[sub_resource type="Theme" id="Theme_d50np"]
+
+[node name="DialogUI" type="CanvasLayer"]
+script = ExtResource("1_6n8ev")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 14.0
+offset_top = 334.0
+offset_right = 626.0
+offset_bottom = 469.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_8pw7i")
+
+[node name="ChoiceContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 87.0
+offset_right = 560.0
+offset_bottom = 126.0
+alignment = 1
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 8.0
+offset_right = 562.0
+offset_bottom = 132.0
+text = "lll"
+label_settings = SubResource("LabelSettings_2oodx")
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="TextureRect" type="TextureRect" parent="Panel"]
+layout_mode = 0
+offset_left = 533.0
+offset_top = 74.0
+offset_right = 609.0
+offset_bottom = 150.0
+texture = ExtResource("2_trnpe")
+expand_mode = 1
+
+[node name="Button" type="Button" parent="."]
+offset_left = 282.0
+offset_top = 413.0
+offset_right = 356.0
+offset_bottom = 447.0
+theme = SubResource("Theme_qc0i0")
+icon_alignment = 1
+expand_icon = true
+
+[node name="TopChoiceContainer" type="VBoxContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.96900004
+anchor_top = 0.31500003
+anchor_right = 0.96900004
+anchor_bottom = 0.31500003
+offset_left = -232.16003
+offset_top = -0.2000122
+offset_right = -0.16003418
+offset_bottom = 165.79999
+grow_horizontal = 0
+
+[node name="ChoiceButton" type="Button" parent="."]
+offset_left = 388.0
+offset_top = 157.0
+offset_right = 619.0
+offset_bottom = 196.0
+theme = SubResource("Theme_d50np")
+theme_override_colors/icon_normal_color = Color(0.6039216, 0.61960787, 0.9098039, 1)
+theme_override_colors/icon_focus_color = Color(0.6039216, 0.61960787, 0.9098039, 1)
+theme_override_colors/icon_pressed_color = Color(0.6039216, 0.61960787, 0.9098039, 1)
+theme_override_colors/icon_hover_color = Color(0.6039216, 0.61960787, 0.9098039, 1)

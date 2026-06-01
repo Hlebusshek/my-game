@@ -1,0 +1,50 @@
+[gd_scene load_steps=7 format=3 uid="uid://dhcfsymredj1h"]
+
+[ext_resource type="Script" uid="uid://ucjgn1foiqbs" path="res://scripts/hospital.gd" id="1_ptr5v"]
+[ext_resource type="Texture2D" uid="uid://bc1jtr5exaobo" path="res://pictures/кабинет.png" id="2_6if2h"]
+[ext_resource type="Texture2D" uid="uid://ct0clkvw1m860" path="res://pictures/врач2.png" id="3_4ov0p"]
+[ext_resource type="Texture2D" uid="uid://d1a6tlimy3wy2" path="res://pictures/gg2.png" id="4_l86x5"]
+[ext_resource type="AudioStream" uid="uid://xupkra6wg5ln" path="res://music/hospital.wav" id="5_7bm6o"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ndcbq"]
+font_size = 22
+
+[node name="Hospital" type="Node"]
+script = ExtResource("1_ptr5v")
+
+[node name="Hospital" type="Sprite2D" parent="."]
+position = Vector2(320, 240)
+texture = ExtResource("2_6if2h")
+
+[node name="Doctor" type="Sprite2D" parent="."]
+position = Vector2(263, 291)
+scale = Vector2(0.426953, 0.426953)
+texture = ExtResource("3_4ov0p")
+
+[node name="Gg" type="Sprite2D" parent="."]
+position = Vector2(384, 302)
+scale = Vector2(0.422656, 0.422656)
+texture = ExtResource("4_l86x5")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="BlackBackground" type="ColorRect" parent="CanvasLayer"]
+visible = false
+offset_right = 655.0
+offset_bottom = 488.0
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+visible = false
+offset_left = 100.0
+offset_top = 182.0
+offset_right = 576.0
+offset_bottom = 263.0
+text = "Конец!
+Спасибо за прохождение игры <3"
+label_settings = SubResource("LabelSettings_ndcbq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_7bm6o")

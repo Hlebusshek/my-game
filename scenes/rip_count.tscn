@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c73yhgkonoeo6"]
+
+[ext_resource type="Script" uid="uid://bnsj7g3vhuohk" path="res://scripts/rip_count.gd" id="1_wh2pf"]
+
+[node name="RipCount" type="Node"]
+script = ExtResource("1_wh2pf")
